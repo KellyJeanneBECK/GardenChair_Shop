@@ -3,19 +3,20 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <section class="container container-form">
+        {{ form_errors(registrationForm) }}
 
-    {{ form_errors(registrationForm) }}
+        {{ form_start(registrationForm, {'attr':{'class':'login-form'}}) }}
+            <h1>Register</h1>
+            {{ form_row(registrationForm.first_name, {'attr':{'class':'form-control'}}) }}
+            {{ form_row(registrationForm.last_name, {'attr':{'class':'form-control'}}) }}
+            {{ form_row(registrationForm.email, {'attr':{'class':'form-control'}}) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
+            {{ form_row(registrationForm.agreeTerms) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.first_name) }}
-        {{ form_row(registrationForm.last_name) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <button type="submit" class="btn btn-lg btn-primary w-100 mt-4">Register</button>
+        {{ form_end(registrationForm) }}
+    </section>
 {% endblock %}
