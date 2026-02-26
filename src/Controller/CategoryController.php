@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CategoryController extends AbstractController
 {
-    #[Route('/category', name: 'app_category')]
+    #[Route('/admin/category', name: 'app_category')]
     public function index(CategoryRepository $repo): Response
     {
         $categories = $repo->findAll();
@@ -23,7 +23,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new', name: 'app_category_new')]
+    #[Route('/admin/category/new', name: 'app_category_new')]
     public function addCategory(EntityManagerInterface $entityManager, Request $request): Response
     {
         $category = new Category();
@@ -34,6 +34,10 @@ final class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($category);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Your category was created with success');
+
+            return $this->redirectToRoute('app_category');
         }
 
         return $this->render('category/newCategory.html.twig', [
@@ -41,7 +45,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/edit/{id}', name: 'app_category_edit')]
+    #[Route('/admin/category/edit/{id}', name: 'app_category_edit')]
     public function editCategory(Category $category, EntityManagerInterface $entityManager, Request $request): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
@@ -49,6 +53,9 @@ final class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash('success', 'Your category was updated with success');
+
             return $this->redirectToRoute('app_category');
         }
 
@@ -57,11 +64,13 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/delete/{id}', name: 'app_category_delete')]
+    #[Route('/admin/category/delete/{id}', name: 'app_category_delete')]
     public function deleteCategory(Category $category, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($category);
         $entityManager->flush();
+
+        $this->addFlash('danger', 'Your category was deleted with success');
 
         return $this->redirectToRoute('app_category');
     }
