@@ -39,10 +39,8 @@ final class CategoryController extends AbstractController
     }
 
     #[Route('/category/edit/{id}', name: 'app_category_edit')]
-    public function editCategory(EntityManagerInterface $entityManager, Request $request, int $id): Response
+    public function editCategory(Category $category, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $category = $entityManager->getRepository(Category::class)->find($id);
-        
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
 
