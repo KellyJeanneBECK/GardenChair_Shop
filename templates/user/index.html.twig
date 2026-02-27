@@ -12,7 +12,7 @@
             <th>Lastname</th>
             <th>email</th>
             <th>Role</th>
-            <th>Action</th>
+            <th>Actions</th>
         </tr>
         {% for user in users %}
             <tr>
@@ -30,6 +30,14 @@
                 </td>
                 <td>
                     {% if ('ROLE_ADMIN' in user.roles === false) %}
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}">
+                            {% if ('ROLE_EDITOR' in user.roles) %}
+                                <span class="btn btn-outline-danger">Remove editor role</span>
+                                {% else %}
+                                    <span class="btn btn-outline-primary">Add editor role</span>
+                        {% endif %}
+                        </a>
+                        {# <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-outline-primary">Edit role</a> #}
                         <a onclick="return confirm('Do you really want to delete this user ?')" href="{{ path('app_user_delete', {'id': user.id}) }}" class="btn btn-danger">Delete</a>
                     {% endif %}
                 </td>
