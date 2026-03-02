@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SubCategory{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Create new SubCategory</h1>
+
+        {{ include('sub_category/_form.html.twig') }}
+
+        <a href="{{ path('app_sub_category_index') }}" class="btn btn-outline-primary mt-2">Back to list</a>
+    </section>
+{% endblock %}
