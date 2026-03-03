@@ -11,9 +11,11 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('/editor/product')]
+#[Route('/product')]
+#[IsGranted('ROLE_ADMIN')]
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
@@ -38,11 +40,11 @@ final class ProductController extends AbstractController
             if ($image) {
                 $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeImageName = $slugger->slug($originalName);
-                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->getExtension();
+                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
 
                 try {
                     $image->move
-                        ($this->getParameter('image-directory'),
+                        ($this->getParameter('image_directory'),
                         $newFileImageName);
                 } catch (FileException $exception) {}
                     $product->setImage($newFileImageName);
@@ -73,12 +75,27 @@ final class ProductController extends AbstractController
 
     #region Edit
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData(); // get image and it's content
+
+            if ($image) {
+                $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeImageName = $slugger->slug($originalName);
+                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension();
+
+                try {
+                    $image->move
+                        ($this->getParameter('image_directory'),
+                        $newFileImageName);
+                } catch (FileException $exception) {}
+                    $product->setImage($newFileImageName);
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Your product was updated with success');

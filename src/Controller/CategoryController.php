@@ -10,10 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/category')]
+#[IsGranted('ROLE_ADMIN')]
 final class CategoryController extends AbstractController
 {
-    #[Route('/admin/category', name: 'app_category')]
+    #[Route(name: 'app_category')]
     public function index(CategoryRepository $repo): Response
     {
         $categories = $repo->findAll();
@@ -23,7 +26,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/category/new', name: 'app_category_new')]
+    #[Route('/new', name: 'app_category_new')]
     public function addCategory(EntityManagerInterface $entityManager, Request $request): Response
     {
         $category = new Category();
@@ -45,7 +48,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/category/edit/{id}', name: 'app_category_edit')]
+    #[Route('/edit/{id}', name: 'app_category_edit')]
     public function editCategory(Category $category, EntityManagerInterface $entityManager, Request $request): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
@@ -64,7 +67,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/category/delete/{id}', name: 'app_category_delete')]
+    #[Route('/delete/{id}', name: 'app_category_delete')]
     public function deleteCategory(Category $category, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($category);
