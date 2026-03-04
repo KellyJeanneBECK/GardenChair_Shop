@@ -14,5 +14,6 @@
             <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
         {{ form_end(form) }}
         <a href="{{ path('app_product_index') }}" class="btn btn-outline-primary mt-2">back to list</a>
+        <a href="{{ path('app_product_stock_history', {'id': product.id}) }}" class="btn btn-outline-primary mt-2">back to product history</a>
     </section>
 {% endblock %}

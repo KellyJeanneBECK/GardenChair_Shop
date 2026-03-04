@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product History{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Product History : "{{ product.name }}"</h1>
+        <table class="table">
+            <tr>
+                <th>Quantity added</th>
+                <th>Date</th>
+            </tr>
+            {% for productHistory in productHistories %}
+            <tr>
+                <td>{{ productHistory.quantity }}</td>
+                <td>{{ productHistory.createdAt|date }}</td>
+            </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ path('app_product_index') }}" class="btn btn-outline-primary">back to list</a>
+        <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary">back to product</a>
+        <a href="{{ path('app_product_add_stock', {'id': product.id}) }}" class="btn btn-primary">add stock</a>
+    </section>
+{% endblock %}
