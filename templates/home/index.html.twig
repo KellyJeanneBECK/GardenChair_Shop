@@ -4,7 +4,26 @@
 
 {% block body %}
 
-<main>
+<main class="container">
     <h1>Welcome !</h1>
+
+    <section class="d-flex justify-content-between flex-md-wrap gap-4 mt-6">
+        {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            {% if product.image is not empty %}
+            <img src="{{ asset('uploads/images/'~product.image)}}" class="card-img-top" alt="Product image">
+            {% else %}
+            <img src="{{ asset('img/PlaceholderProduct.jpg') }}" class="card-img-top" alt="Product image placeholder">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">{{ product.name }}</h4>
+                <p class="card-text">{{ product.description|slice(0, 60) }} ...</p>
+                <h5 class="card-text">{{ product.price }}$</h5>
+                <a href="#" class="btn btn-primary">See product</a>
+                <a href="" class="btn btn-outline-primary">Add to cart</a>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
 </main>
 {% endblock %}
