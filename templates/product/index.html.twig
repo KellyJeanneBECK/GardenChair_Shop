@@ -32,7 +32,7 @@
                     <td>
                         <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-primary">show</a>
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-outline-success">edit</a>
-                        <a href="" class="btn btn-outline-warning">add stock</a>
+                        <a href="{{ path('app_product_add_stock', {'id': product.id}) }}" class="btn btn-outline-warning">add stock</a>
                     </td>
                 </tr>
             {% else %}

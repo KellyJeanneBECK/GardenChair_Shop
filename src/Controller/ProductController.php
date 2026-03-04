@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AddProductHistory;
 use App\Entity\Product;
+use App\Form\AddProductHistoryType;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
@@ -72,6 +73,7 @@ final class ProductController extends AbstractController
             'form' => $form,
         ]);
     }
+    #endregion
 
     #region Show
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
@@ -81,6 +83,7 @@ final class ProductController extends AbstractController
             'product' => $product,
         ]);
     }
+    #endregion
 
     #region Edit
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
@@ -117,6 +120,7 @@ final class ProductController extends AbstractController
             'form' => $form,
         ]);
     }
+    #endregion
 
     #region Delete
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
@@ -131,4 +135,41 @@ final class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
+    #endregion
+
+    #region Stock
+    #[Route('/add/stock/{id}', name: 'app_product_add_stock', methods: ['GET', 'POST'])]
+    public function addStock($id, EntityManagerInterface $entityManager, Request $request, ProductRepository $productRepository): Response
+    {
+        $addStock = new AddProductHistory();
+        $form = $this->createForm(AddProductHistoryType::class, $addStock);
+        $form->handleRequest($request);
+        
+        $product = $productRepository->find($id);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // if new quantity is positive
+            if ($addStock->getQuantity()>0) {
+                $newQuantity = $product->getStock() + $addStock->getQuantity();
+                $product->setStock($newQuantity);
+                $addStock->setCreatedAt(new DateTimeImmutable());
+                $addStock->setProduct($product);
+
+                $entityManager->persist($addStock);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'The product stock was modified');
+                return $this->redirectToRoute('app_product_index');
+            } else {
+                $this->addFlash('danger', "The product stock shouldn't be bellow 0" );
+                return $this->redirectToRoute('app_product_add_stock', ['id'=>$product->getId()]);
+            }
+        }
+
+        return $this->render('product/addStock.html.twig',
+            ['form' => $form->createView(),
+            'product' => $product]
+        );
+    }
+    #endregion
 }

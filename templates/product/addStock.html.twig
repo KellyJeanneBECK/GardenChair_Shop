@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Stock{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Add Stock for "{{ product.name }}"</h1>
+
+        {% include 'layouts/_flash_message.html.twig' %}
+
+        {{ form_start(form) }}
+            <label for="">Quantity</label>
+            {{ form_widget(form.quantity, {'attr':{'class':'form form-control mb-3', 'placeholder': product.stock }}) }}
+            <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+        <a href="{{ path('app_product_index') }}" class="btn btn-outline-primary mt-2">back to list</a>
+    </section>
+{% endblock %}
