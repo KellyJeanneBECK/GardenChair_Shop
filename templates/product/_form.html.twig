@@ -5,8 +5,10 @@
      {{ form_widget(form.description, {attr:{'class': 'form form-control'}}) }}
      <label for="">Price</label>
      {{ form_widget(form.price, {attr:{'class': 'form form-control'}}) }}
-     <label for="">Stock</label>
-     {{ form_widget(form.stock, {attr:{'class': 'form form-control'}}) }}
+     {% if button_label != 'Update' %}
+        <label for="">Stock</label>
+        {{ form_widget(form.stock, {attr:{'class': 'form form-control'}}) }}
+     {% endif %}
      <label for="">Image</label>
      {{ form_widget(form.image, {attr:{'class': 'form form-control'}}) }}
      <label for="">SubCategory</label>
