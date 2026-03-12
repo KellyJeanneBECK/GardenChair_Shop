@@ -21,10 +21,11 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/home/product/{id}', name: 'app_home_product')]
-    public function showProduct(Product $product): Response
+    public function showProduct(Product $product, ProductRepository $productRepository): Response
     {
         return $this->render('home/show.html.twig', [
-            'product' => $product
+            'product' => $product,
+            'productList' => $productRepository->findBy([], ['id'=>'DESC'], 4),
         ]);
     }
 }
