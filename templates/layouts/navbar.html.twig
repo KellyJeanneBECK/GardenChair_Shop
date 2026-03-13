@@ -9,15 +9,18 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{{ path('app_home') }}">Home</a>
         </li>
+        {% if categories is defined %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Categories
+            Filter categories
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Placeholder</a></li>
-            <li><a class="dropdown-item" href="#">Placeholder</a></li>
-            <li><a class="dropdown-item" href="#">Placeholder</a></li>
+            {% for category in categories %}
+              <li><a class="dropdown-item" href="">{{ category.name }}</a></li>
+              <li><hr class="dropdown-divider"></li>
+            {% endfor %}
           </ul>
+          {% endif %}
         </li>
         {% if is_granted("ROLE_ADMIN") %}
         <li class="nav-item dropdown">
