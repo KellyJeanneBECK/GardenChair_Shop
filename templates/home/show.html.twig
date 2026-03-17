@@ -16,7 +16,7 @@
                         <h1 class="card-title">{{ product.name }}</h1>
                         <p class="card-text">{{ product.description }}</p>
                         <h5 class="card-text">{{ product.price }}$</h5>
-                        <a href="" class="btn btn-outline-dark">Add to cart</a>
+                        <a href="{{ path('app_cart_new', {'id':product.id}) }}" class="btn btn-outline-dark">Add to cart</a>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <h4><a href="{{ path('app_home_product', {'id': product.id}) }}" class="card-title" style="text-decoration: none;">{{ product.name }}</a></h4>
                     <p class="card-text">{{ product.description|slice(0, 60) }} ...</p>
                     <h5 class="card-text">{{ product.price }}$</h5>
-                    <a href="" class="btn btn-outline-dark">Add to cart</a>
+                    <a href="{{ path('app_cart_new', {'id':product.id}) }}" class="btn btn-outline-dark">Add to cart</a>
                 </div>
             </div>
             {% endfor %}
