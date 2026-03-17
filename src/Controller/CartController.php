@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/cart')]
 final class CartController extends AbstractController
 {
     
     public function __construct(private readonly ProductRepository $productRepository)
     {}
     
-    #[Route('/cart', name: 'app_cart', methods: ['GET'])]
+    #[Route(name: 'app_cart', methods: ['GET'])]
     public function index(SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
@@ -35,7 +36,7 @@ final class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/cart/add/{id}', name: 'app_cart_new', methods: ['GET'])]
+    #[Route('/add/{id}', name: 'app_cart_new', methods: ['GET'])]
     public function addProductToCart(int $id, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
@@ -51,7 +52,7 @@ final class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
 
-    #[Route('/cart/remove/{id}', name:'app_cart_remove_product', methods: ['GET'])]
+    #[Route('/remove/{id}', name:'app_cart_remove_product', methods: ['GET'])]
     public function removeProductFromCart(int $id, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
@@ -60,6 +61,13 @@ final class CartController extends AbstractController
         }
         $session->set('cart', $cart);
         
+        return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/remove', name:'app_cart_remove', methods: ['GET'])]
+    public function removeCart(SessionInterface $session): Response
+    {
+        $session->set('cart', []);
         return $this->redirectToRoute('app_cart');
     }
 }
