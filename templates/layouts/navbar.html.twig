@@ -40,10 +40,21 @@
             <li><a class="dropdown-item" href="{{ path('app_sub_category_index') }}">SubCategories Manager</a></li>
             <li><a class="dropdown-item" href="{{ path('app_sub_category_new') }}">Add new sub-category</a></li>
             <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ path('app_user') }}">Users</a></li>
+          </ul>
+        </li>
+        {% endif %}
+        {% if is_granted("ROLE_EDITOR") %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Editor
+          </a>
+          <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{{ path('app_product_index') }}">Product Manager</a></li>
             <li><a class="dropdown-item" href="{{ path('app_product_new') }}">Add new product</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ path('app_user') }}">Users</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_city_index') }}">City Manager</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_city_new') }}">Add new city</a></li>
           </ul>
         </li>
         {% endif %}

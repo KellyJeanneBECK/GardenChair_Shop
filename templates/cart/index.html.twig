@@ -39,5 +39,8 @@
         </section>
     {% endif %}
     <a href="{{ path('app_home') }}" class="btn btn-outline-dark" style="margin-top: 1rem;">Resume shopping</a>
+    {% if total > 1000 %}
+        <img src="{{ asset('img/stonks.webp') }}" alt="STONKS" class="d-block mt-4" style="width: 100%; max-width: 500px">
+    {% endif %}
 </main>
 {% endblock %}
