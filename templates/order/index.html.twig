@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Orders{% endblock %}
+
+{% block body %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-8">
+            <h1>Order</h1>
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input type="submit" value="Continue" class="mt-4 btn btn-dark">
+            {{ form_end(form) }}
+        </div>
+        <div class="col-4 mt-2">
+            <h3>Total to pay : {{ total }} $</h3>
+            <p>Shipping cost :</p>
+        </div>
+    </div>
+</main>
+{% endblock %}
