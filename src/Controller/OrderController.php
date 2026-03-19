@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\City;
 use App\Entity\Order;
 use App\Form\OrderType;
 use App\Repository\ProductRepository;
@@ -46,5 +47,13 @@ final class OrderController extends AbstractController
             'items' => $cartWithData,
             'total' => $total
         ]);
+    }
+
+    #[Route('/city/{id}/shipping/cost', name: 'app_city_shipping_cost')]
+    public function cityShippingCost(City $city): Response
+    {
+        $cityShippingPrice = $city->getShippingCost();
+
+        return new Response($cityShippingPrice);
     }
 }

@@ -34,7 +34,7 @@
         <section>
             <h2>Total</h2>
             <p class="display-6 text-success">{{ total }} $</p>
-            <a href="" class="btn btn-dark">Confirm cart</a>
+            <a href="{{ path('app_order') }}" class="btn btn-dark">Confirm cart</a>
             <a href="{{ path('app_cart_remove') }}" class="btn btn-danger">Delete cart</a>
         </section>
     {% endif %}
