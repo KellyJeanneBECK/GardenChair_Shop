@@ -14,9 +14,9 @@
             {{ form_end(form) }}
         </div>
         <div class="col-4 mt-2">
-            <h4>Your cart : {{ total }} $</h4>
-            <p>Shipping cost :</p>
-            <h3>Total :</h3>
+            <h4>Your cart : <span id="card-price">{{ total }}</span> $</h4>
+            <p>Shipping cost : <span id="shippingCost"></span> $</p>
+            <h3>Total : <span class="total-price"></span> $</h3>
         </div>
     </div>
 </main>
@@ -26,16 +26,25 @@
         const citySelector = $('#order_city');
         const cityValue = citySelector.val();
 
-        const url = `http://localhost:8000/city/${cityValue}/shipping/cost`;
+        const url = `/city/${cityValue}/shipping/cost`;
 
         function ajaxRequest(url) {
             $.ajax({
-                url:url,
-                type:'GET',
-                success:function(response){
+                url: url,
+                type: 'GET',
+                success: function(response){
                     const newResponse = JSON.parse(response)
+
                     if (parseInt(newResponse.status) === 200){
                         console.log(newResponse.status)
+                        $("#shippingCost").text(newResponse.content)
+
+                        const cardPrice = parseInt($('#card-price').text());
+                        const shippingCost = parseInt($('#shippingCost').text());
+                        $('.total-price').text(cardPrice+shippingCost);
+
+                        console.log(cardPrice)
+                        console.log(shippingCost)
                     }
                 },
                 error:function(xhr,status,error){
@@ -43,6 +52,13 @@
                 }
             })
         }
-    });
+
+        ajaxRequest(url)
+
+        citySelector.on('change', function() {
+            const urlUpdate = `/city/${$(this).val()}/shipping/cost`;
+            ajaxRequest(urlUpdate)
+        })
+    })
 </script>
 {% endblock %}

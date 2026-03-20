@@ -43,7 +43,6 @@ class OrderType extends AbstractType
                 'choice_label' => 'name',
                 'label'=>'City',
                 'attr'=>['class'=>'form form-control'],
-                'placeholder'=>'Select city'
             ])
         ;
     }
