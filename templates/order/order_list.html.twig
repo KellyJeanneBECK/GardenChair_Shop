@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order List{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <h1>Order List</h1>
+        {% for order in orders %}
+            <section style="margin-top: 3rem;">
+                <h2>Order N°{{ order.id }}</h2>
+                <table class="table">
+                    <h5 class="text-success mt-4">User informations</h5>
+                    <tr>
+                        <th>User name</th>
+                        <th>Creation date</th>
+                        <th>Adress</th>
+                        <th>Phone number</th>
+                        <th>Pay on delivery</th>
+                    </tr>
+                    <tr>
+                        <td>{{ order.firstName }} {{ order.lastName|upper }}</td>
+                        <td>{{ order.createdAt|date }}</td>
+                        <td>{{ order.adress }}, {{ order.city.name|upper }}</td>
+                        <td>{{ order.phone }}</td>
+                        {% if order.payOnDelivery %}
+                            <td>Yes</td>
+                        {% else %}
+                            <td>No</td>
+                        {% endif %}
+                    </tr>
+                </table>
+                <table class="table">
+                    <h5 class="text-success mt-4">Products</h5>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                    {% for product in order.orderProducts %}
+                        <tr>
+                            <td>
+                                {% if product.product.image is not empty %}
+                                    <img src="{{ asset('uploads/images/'~product.product.image)}}" style="height: 20vw;" alt="Product image">
+                                {% else %}
+                                    <img src="{{ asset('img/PlaceholderProduct.jpg') }}" style="height: 20vw;" alt="Product image placeholder">
+                                {% endif %}
+                            </td>
+                            <td>{{ product.product.name }}</td>
+                            <td>{{ product.product.price }} $</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <h3 class="display-6">Total : {{ order.totalPrice }} $</h3 class="display-6">
+            </section>
+        {% endfor %}
+    </main>
+{% endblock %}
