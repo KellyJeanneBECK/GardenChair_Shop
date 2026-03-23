@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 final class OrderController extends AbstractController
 {
     #[Route('/order', name: 'app_order')]
@@ -40,6 +42,8 @@ final class OrderController extends AbstractController
 
             $em->persist($order);
             $em->flush();
+
+            return $this->redirectToRoute('app_home');
         }
         
         return $this->render('order/index.html.twig', [
