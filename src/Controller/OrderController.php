@@ -101,4 +101,13 @@ final class OrderController extends AbstractController
         $this->addFlash('success', "This order is delivered");
         return $this->redirectToRoute('app_orders_show');
     }
+
+    #[Route('/editor/order/{id}/delete', name: 'app_orders_delete')]
+    public function deleteOrder(EntityManagerInterface $em, Order $order): Response
+    {
+        $em->remove($order);
+        $em->flush();
+        $this->addFlash('danger', "This order was deleted");
+        return $this->redirectToRoute('app_orders_show');
+    }
 }

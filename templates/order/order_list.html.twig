@@ -65,7 +65,7 @@
                         <a href="{{ path('app_orders_is-completed-update', {'id': order.id}) }}" class="btn btn-success">Mark as delivered</a>
                     {% endif %}
                     <a href="" class="btn btn-outline-success">Print order</a>
-                    <a href="" class="btn btn-outline-danger">Delete order</a>
+                    <a onclick="return confirm('Do you really want to delete this order ?')" href="{{ path('app_orders_delete', {'id': order.id}) }}" class="btn btn-outline-danger">Delete order</a>
                 </div>
             </section>
         {% endfor %}
