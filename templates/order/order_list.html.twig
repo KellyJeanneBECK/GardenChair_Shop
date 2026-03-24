@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Order List{% endblock %}
+{% block title %}Orders List{% endblock %}
 
 {% block body %}
     <main class="container">
-        <h1>Order List</h1>
+        <h1>Orders List</h1>
         {% for order in orders %}
-            <section style="margin-top: 3rem;">
+            <section style="margin-top: 3rem; padding-top: 1rem; border-top: 2px solid;">
                 <h2>Order N°{{ order.id }}</h2>
                 <table class="table">
-                    <h5 class="text-success mt-4">User informations</h5>
+                    <h5 class="text-success mt-4">General informations</h5>
                     <tr>
                         <th>User name</th>
                         <th>Creation date</th>
@@ -52,8 +52,13 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <h4>{{ order.city.shippingCost }}</h4>
+                <h5> Shipping cost : {{ order.city.shippingCost }} $</h5>
                 <h3 class="display-6">Total : {{ order.totalPrice + order.city.shippingCost }} $</h3 class="display-6">
+                <div class="mb-4">
+                    <a href="" class="btn btn-success">Mark as delivered</a>
+                    <a href="" class="btn btn-outline-success">Print order</a>
+                    <a href="" class="btn btn-outline-danger">Delete order</a>
+                </div>
             </section>
         {% endfor %}
     </main>
