@@ -1,0 +1,73 @@
+{% block body %}
+<main class="container">
+    <section style="margin-top: 1rem;">
+        <h1>Bill N°{{ order.id }}</h1>
+        <span>Order date : {{ order.createdAt|date }}</span>
+        <table class="table">
+            <h3 class="text-success mt-4">General informations</h3>
+            <thead>
+                <tr>
+                    <th>User name</th>
+                    <th>Creation date</th>
+                    <th>Adress</th>
+                    <th>Phone number</th>
+                    <th>Pay on delivery</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ order.firstName }} {{ order.lastName|upper }}</td>
+                    <td>{{ order.createdAt|date }}</td>
+                    <td>{{ order.adress }}, {{ order.city.name|upper }}</td>
+                    <td>{{ order.phone }}</td>
+                    {% if order.payOnDelivery %}
+                        <td>Yes</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+        <table class="table">
+            <h3 class="text-success mt-4">Products</h3>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in order.orderProducts %}
+                <tr>
+                    <td>{{ product.product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.product.price * product.quantity }} $</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h4> Shipping cost : {{ order.city.shippingCost }} $</h4>
+        <h2 class="display-6">Total : {{ order.totalPrice + order.city.shippingCost }} $</h2 class="display-6">
+    </section>
+</main>
+{% endblock %}
+
+<style>
+    table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td{
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    thead{
+        background: #f2f2f2;
+    }
+    tbody tr:nth-child(odd){
+        background: #f9f9f9
+    }
+
+</style>
