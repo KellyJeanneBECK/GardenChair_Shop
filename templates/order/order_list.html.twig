@@ -61,5 +61,6 @@
                 </div>
             </section>
         {% endfor %}
+        {{ knp_pagination_render(orders, 'layouts/paginator_template.html.twig') }}
     </main>
 {% endblock %}

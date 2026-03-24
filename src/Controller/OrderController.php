@@ -11,6 +11,7 @@ use App\Repository\ProductRepository;
 use App\Service\Cart;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,9 +77,14 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/editor/order', name:'app_orders_show')]
-    public function getAllOrder(OrderRepository $orderRepository):Response
+    public function getAllOrder(OrderRepository $orderRepository, Request $request, PaginatorInterface $paginator):Response
     {
-        $orders = $orderRepository->findAll();
+        $data = $orderRepository->findAll();
+        $orders = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            5
+        );
 
         return $this->render('order/order_list.html.twig', [
             'orders' => $orders
