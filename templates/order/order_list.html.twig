@@ -4,10 +4,16 @@
 
 {% block body %}
     <main class="container">
+        {% include 'layouts/_flash_message.html.twig' %}
         <h1>Orders List</h1>
         {% for order in orders %}
             <section style="margin-top: 3rem; padding-top: 1rem; border-top: 2px solid;">
                 <h2>Order N°{{ order.id }}</h2>
+                {% if order.isCompleted == true %}
+                    <span class="text-success">Commande livrée</span>
+                {% else %}
+                    <span class="text-danger">Commande non livrée</span>
+                {% endif %}
                 <table class="table">
                     <h5 class="text-success mt-4">General informations</h5>
                     <tr>
@@ -55,7 +61,9 @@
                 <h5> Shipping cost : {{ order.city.shippingCost }} $</h5>
                 <h3 class="display-6">Total : {{ order.totalPrice + order.city.shippingCost }} $</h3 class="display-6">
                 <div class="mb-4">
-                    <a href="" class="btn btn-success">Mark as delivered</a>
+                    {% if order.isCompleted != true %}
+                        <a href="{{ path('app_orders_is-completed-update', {'id': order.id}) }}" class="btn btn-success">Mark as delivered</a>
+                    {% endif %}
                     <a href="" class="btn btn-outline-success">Print order</a>
                     <a href="" class="btn btn-outline-danger">Delete order</a>
                 </div>
