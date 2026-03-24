@@ -34,6 +34,7 @@
                     <tr>
                         <th>Image</th>
                         <th>Name</th>
+                        <th>Quantity</th>
                         <th>Price</th>
                     </tr>
                     {% for product in order.orderProducts %}
@@ -46,7 +47,8 @@
                                 {% endif %}
                             </td>
                             <td>{{ product.product.name }}</td>
-                            <td>{{ product.product.price }} $</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.product.price * product.quantity }} $</td>
                         </tr>
                     {% endfor %}
                 </table>
