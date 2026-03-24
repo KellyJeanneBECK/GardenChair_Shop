@@ -41,7 +41,7 @@
                         <tr>
                             <td>
                                 {% if product.product.image is not empty %}
-                                    <img src="{{ asset('uploads/images/'~product.product.image)}}" style="width: 20vw;" alt="Product image">
+                                    <img src="{{ asset('uploads/images/'~product.product.image)}}" style="width: 10vw;" alt="Product image">
                                 {% else %}
                                     <span>None</span>
                                 {% endif %}
@@ -52,7 +52,8 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <h3 class="display-6">Total : {{ order.totalPrice }} $</h3 class="display-6">
+                <h4>{{ order.city.shippingCost }}</h4>
+                <h3 class="display-6">Total : {{ order.totalPrice + order.city.shippingCost }} $</h3 class="display-6">
             </section>
         {% endfor %}
     </main>
