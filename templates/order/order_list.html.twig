@@ -40,9 +40,10 @@
                         <tr>
                             <td>
                                 {% if product.product.image is not empty %}
-                                    <img src="{{ asset('uploads/images/'~product.product.image)}}" style="height: 20vw;" alt="Product image">
+                                    <img src="{{ asset('uploads/images/'~product.product.image)}}" style="width: 20vw;" alt="Product image">
                                 {% else %}
-                                    <img src="{{ asset('img/PlaceholderProduct.jpg') }}" style="height: 20vw;" alt="Product image placeholder">
+                                    <span>None</span>
+                                    {# <img src="{{ asset('img/PlaceholderProduct.jpg') }}" style="height: 20vw;" alt="Product image placeholder"> #}
                                 {% endif %}
                             </td>
                             <td>{{ product.product.name }}</td>
