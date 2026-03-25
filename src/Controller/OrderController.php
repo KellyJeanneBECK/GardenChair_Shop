@@ -16,12 +16,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
 final class OrderController extends AbstractController
 {
+    public function __construct(private MailerInterface $mailer)
+    {
+        
+    }
+
     #[Route('/order', name: 'app_order')]
     public function index(Request $request, EntityManagerInterface $em, SessionInterface $session, ProductRepository $productRepository, Cart $cart): Response
     {
@@ -52,6 +59,17 @@ final class OrderController extends AbstractController
                 }
 
                 $session->set('cart', []);
+
+                $html = $this->renderView('mail/orderCorfirm.html.twig', [
+                    'order'=>$order
+                ]);
+                $email = (new Email())
+                ->from('gardenchair@gmail.com')
+                ->to($order->getEmail())
+                ->subject('Confirmation of order reception')
+                ->html($html);
+                $this->mailer->send($email);
+
                 return $this->redirectToRoute('app_order_message');
             }
         }

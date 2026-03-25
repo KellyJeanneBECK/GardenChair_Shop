@@ -1,0 +1,59 @@
+{% block body %}
+<div class="container">
+    <h1>Order validation : N°{{ order.id }}</h1>
+    <span>Date : {{ order.createdAt|date }}</span>
+    <p>Thanks for your purchase, you made us a little bit richer !</p>
+    <span>Order details</span>
+    <section style="margin-top: 1rem;">
+        <span>Order date : {{ order.createdAt|date }}</span>
+        <table class="table">
+            <h3 class="text-success mt-4">General informations</h3>
+            <thead>
+                <tr>
+                    <th>User name</th>
+                    <th>Creation date</th>
+                    <th>Adress</th>
+                    <th>Phone number</th>
+                    <th>Pay on delivery</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ order.firstName }} {{ order.lastName|upper }}</td>
+                    <td>{{ order.createdAt|date }}</td>
+                    <td>{{ order.adress }}, {{ order.city.name|upper }}</td>
+                    <td>{{ order.phone }}</td>
+                    {% if order.payOnDelivery %}
+                        <td>Yes</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+        <table class="table">
+            <h3 class="text-success mt-4">Products</h3>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for product in order.orderProducts %}
+                <tr>
+                    <td>{{ product.product.name }}</td>
+                    <td>{{ product.product.price }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.product.price * product.quantity }} $</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h4> Shipping cost : {{ order.city.shippingCost }} $</h4>
+        <h2>Total : {{ order.totalPrice + order.city.shippingCost }} $</h2>
+    </section>
+</div>
+{% endblock %}

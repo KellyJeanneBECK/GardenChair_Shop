@@ -24,6 +24,11 @@ class OrderType extends AbstractType
                 'label'=>'Last name',
                 'attr'=>['class'=>'form form-control']
             ])
+            ->add('email', null, [
+                'required'=>'true',
+                'label'=>'Email',
+                'attr'=>['class'=>'form form-control']
+            ])
             ->add('phone', null, [
                 'required'=>'true',
                 'label'=>'Phone number',
