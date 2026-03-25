@@ -1,5 +1,5 @@
 {% block body %}
-<main class="container">
+<div class="container">
     <section style="margin-top: 1rem;">
         <h1>Bill N°{{ order.id }}</h1>
         <span>Order date : {{ order.createdAt|date }}</span>
@@ -33,14 +33,16 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Quantity</th>
                     <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
                 </tr>
             </thead>
             <tbody>
             {% for product in order.orderProducts %}
                 <tr>
                     <td>{{ product.product.name }}</td>
+                    <td>{{ product.product.price }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>{{ product.product.price * product.quantity }} $</td>
                 </tr>
@@ -48,9 +50,9 @@
             </tbody>
         </table>
         <h4> Shipping cost : {{ order.city.shippingCost }} $</h4>
-        <h2 class="display-6">Total : {{ order.totalPrice + order.city.shippingCost }} $</h2 class="display-6">
+        <h2>Total : {{ order.totalPrice + order.city.shippingCost }} $</h2>
     </section>
-</main>
+</div>
 {% endblock %}
 
 <style>
