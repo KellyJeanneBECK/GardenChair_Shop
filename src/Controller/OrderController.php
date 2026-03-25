@@ -9,6 +9,7 @@ use App\Form\OrderType;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Service\Cart;
+use App\Service\StripePayment;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -72,6 +73,13 @@ final class OrderController extends AbstractController
 
                 return $this->redirectToRoute('app_order_message');
             }
+
+            $paymentStripe = new StripePayment();
+            $shippingCost = $order->getCity()->getShippingCost();
+            $paymentStripe->startPayment($data, $shippingCost);
+            $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
+
+            return $this->redirect($stripeRedirectUrl);
         }
         
         return $this->render('order/index.html.twig', [
