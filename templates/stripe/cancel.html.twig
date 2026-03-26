@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Order validation message{% endblock %}
+{% block title %}Payment cancel{% endblock %}
 
 {% block body %}
-<main class="stonks-container">
+<div class="stonks-container">
     <div class="container">
-        <h1 class="stonks-title">Your order is registered</h1>
+        <h1 class="stonks-title">Error : your payment was canceled</h1>
         <div class="mt-5">
             <a href="{{ path('app_home') }}" class="btn btn-light">Back to home page</a>
         </div>
     </div>
-</main>
+</div>
 
 <style>
     .stonks-container {
-        background-image: url("{{ asset('img/stonks.webp') }}");
+        background-image: url("{{ asset('img/not-stonks.webp') }}");
     }
 </style>
 {% endblock %}

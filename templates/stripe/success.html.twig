@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment success{% endblock %}
+
+{% block body %}
+<div class="stonks-container">
+    <div class="container">
+        <h1 class="stonks-title">Your payment was accepted</h1>
+        <div class="mt-5">
+            <a href="{{ path('app_home') }}" class="btn btn-light">Back to home page</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stonks-container {
+        background-image: url("{{ asset('img/stonks.webp') }}");
+    }
+</style>
+{% endblock %}
