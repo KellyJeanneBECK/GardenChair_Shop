@@ -40,43 +40,44 @@ final class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            if($order->isPayOnDelivery()) {
 
-                if(!empty($data['total'])){
-                    $order->setTotalPrice($data['total']);
-                    $order->setCreatedAt(new DateTimeImmutable());
+            if(!empty($data['total'])){
+                $order->setTotalPrice($data['total']);
+                $order->setCreatedAt(new DateTimeImmutable());
+                $order->setIsPaymentCompleted(0);
 
-                    $em->persist($order);
+                $em->persist($order);
+                $em->flush();
+                
+                foreach($data['cart'] as $value) {
+                    $orderProduct = new OrderProducts();
+                    $orderProduct->setOrder($order);
+                    $orderProduct->setProduct($value['product']);
+                    $orderProduct->setQuantity($value['quantity']);
+                    $em->persist($orderProduct);
                     $em->flush();
-                    
-                    foreach($data['cart'] as $value) {
-                        $orderProduct = new OrderProducts();
-                        $orderProduct->setOrder($order);
-                        $orderProduct->setProduct($value['product']);
-                        $orderProduct->setQuantity($value['quantity']);
-                        $em->persist($orderProduct);
-                        $em->flush();
-                    }
                 }
 
-                $session->set('cart', []);
+                if($order->isPayOnDelivery()) {
+                    $session->set('cart', []);
 
-                $html = $this->renderView('mail/orderCorfirm.html.twig', [
-                    'order'=>$order
-                ]);
-                $email = (new Email())
-                ->from('gardenchair@gmail.com')
-                ->to($order->getEmail())
-                ->subject('Confirmation of order reception')
-                ->html($html);
-                $this->mailer->send($email);
+                    $html = $this->renderView('mail/orderCorfirm.html.twig', [
+                        'order'=>$order
+                    ]);
+                    $email = (new Email())
+                    ->from('gardenchair@gmail.com')
+                    ->to($order->getEmail())
+                    ->subject('Confirmation of order reception')
+                    ->html($html);
+                    $this->mailer->send($email);
 
-                return $this->redirectToRoute('app_order_message');
-            }
+                    return $this->redirectToRoute('app_order_message');
+                }
+            } 
 
             $paymentStripe = new StripePayment();
             $shippingCost = $order->getCity()->getShippingCost();
-            $paymentStripe->startPayment($data, $shippingCost);
+            $paymentStripe->startPayment($data, $shippingCost, $order->getId());
             $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
 
             return $this->redirect($stripeRedirectUrl);
