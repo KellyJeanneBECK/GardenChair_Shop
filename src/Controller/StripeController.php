@@ -8,13 +8,16 @@ use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class StripeController extends AbstractController
 {
     #[Route('/pay/success', name: 'app_stripe_success')]
-    public function stripeSuccess(): Response
+    public function stripeSuccess(SessionInterface $session): Response
     {
+        $session->set('cart', []);
+        
         return $this->render('stripe/success.html.twig', [
             
         ]);
@@ -66,8 +69,13 @@ final class StripeController extends AbstractController
                 // $fileName = 'stripe-detail-'.uniqid().'.txt';
                 $orderId = $paymentIntent->metadata->orderId;
                 $order = $orderRepository->find($orderId);
-                $order->setIsPaymentCompleted(1);
-                $em->flush();
+
+                $cartPrice = $order->getTotalPrice();
+                $stripeTotalAmount = $paymentIntent->amount/100;
+                if($cartPrice==$stripeTotalAmount){
+                    $order->setIsPaymentCompleted(1);
+                    $em->flush();
+                }
                 // file_put_contents($fileName, $orderId);
 
                 break;
