@@ -104,10 +104,19 @@ final class OrderController extends AbstractController
         return $this->render('order/order_message.html.twig');
     }
 
-    #[Route('/editor/order', name:'app_orders_show')]
-    public function getAllOrder(OrderRepository $orderRepository, Request $request, PaginatorInterface $paginator):Response
+    #[Route('/editor/order/{type}', name:'app_orders_show')]
+    public function getAllOrder($type, OrderRepository $orderRepository, Request $request, PaginatorInterface $paginator):Response
     {
-        $data = $orderRepository->findAll();
+        if($type == 'is-completed'){
+            $data = $orderRepository->findBy(['isCompleted'=>1], ['id'=>'DESC']);
+        } else if($type == 'pay-on-stripe-not-delivered'){
+            $data = $orderRepository->findBy(['isCompleted'=>null, 'payOnDelivery'=>0], ['id'=>'DESC']);
+        } else if($type == 'pay-on-stripe-is-delivered'){
+            $data = $orderRepository->findBy(['isCompleted'=>1, 'payOnDelivery'=>0], ['id'=>'DESC']);
+        } else if($type == 'no-delivery'){
+            $data = $orderRepository->findBy(['isCompleted'=>null], ['id'=>'DESC']);
+        }
+
         $orders = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
@@ -120,22 +129,22 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/editor/order/{id}/is-completed/update', name: 'app_orders_is-completed-update')]
-    public function isCompleted($id, OrderRepository $orderRepo, EntityManagerInterface $em): Response
+    public function isCompleted($id, OrderRepository $orderRepo, EntityManagerInterface $em, Request $request): Response
     {
         $order = $orderRepo->find($id);
         $order->setIsCompleted(true);
         $em->flush();
 
         $this->addFlash('success', "This order is delivered");
-        return $this->redirectToRoute('app_orders_show');
+        return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/editor/order/{id}/delete', name: 'app_orders_delete')]
-    public function deleteOrder(EntityManagerInterface $em, Order $order): Response
+    public function deleteOrder(EntityManagerInterface $em, Order $order, Request $request): Response
     {
         $em->remove($order);
         $em->flush();
         $this->addFlash('danger', "This order was deleted");
-        return $this->redirectToRoute('app_orders_show');
+        return $this->redirect($request->headers->get('referer'));
     }
 }

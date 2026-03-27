@@ -56,7 +56,11 @@
             <li><a class="dropdown-item" href="{{ path('app_city_index') }}">City Manager</a></li>
             <li><a class="dropdown-item" href="{{ path('app_city_new') }}">Add new city</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ path('app_orders_show') }}">Orders list</a></li>
+            <li><a class="dropdown-item text-secondary" href="">Orders lists</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_orders_show', {'type': 'is-completed'}) }}">Delivered</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_orders_show', {'type': 'no-delivery'}) }}">Not delivered</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_orders_show', {'type': 'pay-on-stripe-not-delivered'}) }}">Payed not delivered</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_orders_show', {'type': 'pay-on-stripe-is-delivered'}) }}">Payed delivered</a></li>
           </ul>
         </li>
         {% endif %}
