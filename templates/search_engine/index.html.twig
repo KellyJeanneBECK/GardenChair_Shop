@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SearchEngineController!{% endblock %}
+
+{% block body %}
+<main class="container">
+    <h1>Hello</h1>
+    <section class="d-flex justify-content-between flex-md-wrap gap-4 mt-6">
+        {% for product in products %}
+        <div class="card" style="width: 18rem;">
+            {% if product.image is not empty %}
+            <img src="{{ asset('uploads/images/'~product.image)}}" class="card-img-top" alt="Product image">
+            {% else %}
+            <img src="{{ asset('img/PlaceholderProduct.jpg') }}" class="card-img-top" style="height: 300px;" alt="Product image placeholder">
+            {% endif %}
+            <div class="card-body">
+                <h4><a href="{{ path('app_home_product', {'id': product.id}) }}" class="card-title" style="text-decoration: none;">{{ product.name }}</a></h4>
+                <p class="card-text">{{ product.description|slice(0, 60) }} ...</p>
+                <h5 class="card-text">{{ product.price }}$</h5>
+                <a href="{{ path('app_cart_new', {'id':product.id}) }}" class="btn btn-outline-dark">Add to cart</a>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}
