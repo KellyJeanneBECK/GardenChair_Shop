@@ -18,16 +18,20 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('first_name')
-            ->add('last_name')
-            ->add('email')
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue(
-                        message: 'You should agree to our terms.',
-                    ),
-                ],
+            ->add('first_name', null, [
+                'required'=>'true',
+                'label'=>'First name',
+                'attr'=>['class'=>'form form-control']
+            ])
+            ->add('last_name', null, [
+                'required'=>'true',
+                'label'=>'Last name',
+                'attr'=>['class'=>'form form-control']
+            ])
+            ->add('email', null, [
+                'required'=>'true',
+                'label'=>'Email',
+                'attr'=>['class'=>'form form-control']
             ])
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
@@ -36,8 +40,8 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'The password fields must match.',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Repeat Password'],
+                'first_options'  => ['label' => 'Password', 'attr' => ['class'=>'form form-control']],
+                'second_options' => ['label' => 'Repeat Password', 'attr' => ['class'=>'form form-control']],
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -49,6 +53,14 @@ class RegistrationFormType extends AbstractType
                         minMessage: 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         max: 4096,
+                    ),
+                ],
+            ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue(
+                        message: 'You should agree to our terms.',
                     ),
                 ],
             ])
