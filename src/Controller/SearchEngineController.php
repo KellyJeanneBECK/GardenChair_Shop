@@ -10,21 +10,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class SearchEngineController extends AbstractController
 {
-    #[Route('/search/engine', name: 'app_search_engine', methods:['GET', 'POST'])]
+    #[Route('/search/engine', name: 'app_search_engine', methods:['GET'])]
     public function index(Request $request, ProductRepository $productRepository): Response
     {
-        $search = [];
-
-        if($request->isMethod('POST')) {
-            $query = $request->request->get('query');
-
-            if ($query) {
-                $search = $productRepository->searchEngine($query);
-            }
+        if($request->isMethod('GET')) {
+            $data = $request->query->all();
+            $query = $data['query'];
+            $search = $productRepository->searchEngine($query);
         }
         
         return $this->render('search_engine/index.html.twig', [
-            'products' => $search
+            'products' => $search,
+            'query' => $query
         ]);
     }
 }
